@@ -13,12 +13,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git"
+    "url": "git+https://github.com/nr2327shc/homebridge-zigbee2mqtt-dawon-switches"
   },
   "dependencies": {
     "mqtt": "^2.18.8"
   },
   "keywords": [
-    "homebridge-plugin"
+    "homebridge-plugin",
+    "Dawon"
   ]
 }
