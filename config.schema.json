@@ -1,0 +1,81 @@
+{
+  "pluginAlias": "DawonSwitch",
+  "pluginType": "platform",
+  "singular": false,
+  "headerDisplay": "Optional content to display above the plugin config. Supports markdown.",
+  "footerDisplay": "Optional content to display below the plugin config. Supports markdown.",
+  "schema": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string",
+          "description": "Name of the switch that contains buttons. This would not be displayed in HomeKit.",
+          "required": true
+        },
+        "numButton":{
+          "title": "Number of Buttons",
+          "type": "string",
+          "placeholder": "1 Button",
+          "oneOf": [
+            {"title": "1 Button", "enum": [1]},
+            {"title": "2 Buttons", "enum": [2]},
+            {"title": "3 Buttons", "enum": [3]}
+          ],
+          "required": true
+        },
+        "btnName":{
+          "title": "Name of Button",
+          "type": "string",
+          "description": "Name of the button which displayed in HomeKit.",
+          "condition":{"functionBody": "return model.numButton == 1"}
+        },
+        "btnTopName":{
+          "title": "Name of Top Button",
+          "type": "string",
+          "description": "Name of the top button which displayed in HomeKit.",
+          "condition":{"functionBody": "return model.numButton == 3 || model.numButton == 2"}
+        },
+        "btnCenterName":{
+          "title": "Name of Center Button",
+          "type": "string",
+          "description": "Name of the center button which displayed in HomeKit.",
+          "condition":{"functionBody": "return model.numButton == 3"}
+        },
+        "btnBottomName":{
+          "title": "Name of Bottom Button",
+          "type": "string",
+          "description": "Name of the bottom button which displayed in HomeKit.",
+          "condition":{"functionBody": "return model.numButton == 3 || model.numButton == 2"}
+        },
+        "baseTopic":{
+          "type": "string",
+          "title": "Base Topic of Zigbee2mqtt",
+          "placeholder":"zigbee2mqtt"
+        },
+        "friendlyName":{
+          "type": "string",
+          "title": "Freindly name at Zigbee2mqt",
+          "required": true
+        },
+        "url": { 
+          "type": "string",
+          "title": "URL",
+          "description": "URL of MQTT server (default: mqtt://localhost:1883)",
+          "placeholder": "mqtt://localhost:1883"
+        },
+        "username": {
+          "type": "string",
+          "required": false,
+          "title": "Username",
+          "description": "Username for MQTT server (optional)" 
+        },
+        "password": {
+          "type": "string",
+          "required": false,
+          "title": "Password",
+          "description": "Password for MQTT server (optional)" 
+        }
+      }
+    }
+}
