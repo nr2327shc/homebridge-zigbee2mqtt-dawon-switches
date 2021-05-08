@@ -129,7 +129,7 @@ class DawonSwitch{
 
   getState(){
     var online = true;
-    if(this.lastSent - this.lastRecieved > 60 *1000){online = false;}
+    // if(this.lastSent - this.lastRecieved > 60 *1000){online = false;}
     if(new Date().getTime() - this.lastRecieve < 600 * 1000){return online}
     this.mqttClient.publish(this.topic_get, this.getString)
     //this.log.info(`in getState publishing ${this.getString}`)
