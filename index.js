@@ -95,7 +95,7 @@ class DawonSwitch{
       clientId: cid
     }
 
-    this.lastRecieved = new Date().getTime();
+    this.lastRecieved = 0;
     this.lastSent = 0;
 
     this.mqttClient = mqtt.connect(config.url || 'mqtt://localhost:1883', opt);
