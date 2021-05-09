@@ -130,20 +130,22 @@ class DawonSwitch{
   getState(){
     var online = true;
     // if(this.lastSent - this.lastRecieved > 60 *1000){online = false;}
-    if(new Date().getTime() - this.lastRecieve < 600 * 1000){return online}
-    this.mqttClient.publish(this.topic_get, this.getString)
+    this.updateLastSent();
+    //this.log.info(`int getState, lastRecieved : ${this.lastRecieved}`)
+    if(new Date().getTime() - this.lastRecieved < 600 * 1000){return online}
+    //this.log.info('a message published')
     //this.log.info(`in getState publishing ${this.getString}`)
     //this.log.info(`${this.lastSent - this.lastRecieved}`)
-    this.updateLastSent();
+    this.mqttClient.publish(this.topic_get, this.getString)
     return online;
   };
   setState(idx, value){
+    this.updateLastSent();
     var setDict = {}
     setDict[idx] = value ? "ON" : "OFF"
     const setString = JSON.stringify(setDict)
     this.mqttClient.publish(this.topic_set, setString)
     //this.log.info(`in setState publishing ${setString}`)
-    this.updateLastSent();
   };
   updateLastSent(){
     var now = new Date().getTime();
