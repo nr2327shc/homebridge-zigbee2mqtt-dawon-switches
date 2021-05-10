@@ -37,7 +37,7 @@ class DawonBtn{
     if(val != this.switchOn){
       // this.log.info(`transferState ${val}`)
       this.switchOn = val;
-      this.switchService.getCharacteristic(Homebridge.hap.Characteristic.On).setValue(val, undefined, {})
+      this.switchService.getCharacteristic(Homebridge.hap.Characteristic.On).updateValue(val)
     }
   }
 
@@ -121,7 +121,7 @@ class DawonSwitch{
   broadcastState(message){
     this.lastRecieved = new Date().getTime();
     var rtn = JSON.parse(message.toString());
-    //this.log.info(`in broadcastState ${message.toString()}`)
+    // this.log.info(`in broadcastState ${message.toString()}`)
     for(var key in rtn){
       if(this.stat_acc.hasOwnProperty(key)){this.stat_acc[key].transferState(rtn[key] === "ON" ? true:false)}
     }
@@ -130,21 +130,20 @@ class DawonSwitch{
   getState(){
     var online = true;
     // if(this.lastSent - this.lastRecieved > 60 *1000){online = false;}
+    // this.log.info("getState() started");
     this.updateLastSent();
-    //this.log.info(`int getState, lastRecieved : ${this.lastRecieved}`)
     if(new Date().getTime() - this.lastRecieved < 600 * 1000){return online}
-    //this.log.info('a message published')
-    //this.log.info(`in getState publishing ${this.getString}`)
-    //this.log.info(`${this.lastSent - this.lastRecieved}`)
-    this.mqttClient.publish(this.topic_get, this.getString)
+    this.mqttClient.publish(this.topic_get, this.getString);
+    // this.log.info("getState() published");
     return online;
   };
   setState(idx, value){
+    // this.log.info("setState() started");
     this.updateLastSent();
     var setDict = {}
     setDict[idx] = value ? "ON" : "OFF"
-    const setString = JSON.stringify(setDict)
-    this.mqttClient.publish(this.topic_set, setString)
+    const setString = JSON.stringify(setDict);
+    this.mqttClient.publish(this.topic_set, setString);
     //this.log.info(`in setState publishing ${setString}`)
   };
   updateLastSent(){
