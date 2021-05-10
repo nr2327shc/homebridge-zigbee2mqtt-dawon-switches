@@ -96,7 +96,7 @@ class DawonSwitch{
     }
 
     this.lastRecieved = 0;
-    this.lastSent = 0;
+    this.online = true;
 
     this.mqttClient = mqtt.connect(config.url || 'mqtt://localhost:1883', opt);
     this.mqttClient.on('error', (err) => { log('MQTT Error:' + err ) });
@@ -126,30 +126,25 @@ class DawonSwitch{
       if(this.stat_acc.hasOwnProperty(key)){this.stat_acc[key].transferState(rtn[key] === "ON" ? true:false)}
     }
   };
-
   getState(){
-    var online = true;
-    // if(this.lastSent - this.lastRecieved > 60 *1000){online = false;}
-    // this.log.info("getState() started");
-    this.updateLastSent();
-    if(new Date().getTime() - this.lastRecieved < 600 * 1000){return online}
+    if(new Date().getTime() - this.lastRecieved < 600 * 1000){return this.online}
     this.mqttClient.publish(this.topic_get, this.getString);
-    // this.log.info("getState() published");
-    return online;
+    // const nt = new Date().getTime();
+    // setTimeout(()=>{this.offlineChecker(nt)}, 10000);
+    return this.online;
   };
   setState(idx, value){
     // this.log.info("setState() started");
-    this.updateLastSent();
     var setDict = {}
     setDict[idx] = value ? "ON" : "OFF"
     const setString = JSON.stringify(setDict);
     this.mqttClient.publish(this.topic_set, setString);
-    //this.log.info(`in setState publishing ${setString}`)
+    // const nt = new Date().getTime();
+    // setTimeout(()=>{this.offlineChecker(nt)}, 10000);
   };
-  updateLastSent(){
-    var now = new Date().getTime();
-    if(now-this.lastSent > 10 * 1000){this.lastSent = now}
-  };
+  // offlineChecker(_time){
+  //   this.online = this.lastRecieved >= _time;
+  // };
 }
 
 module.exports = (homebridge) => {
